@@ -6,7 +6,30 @@ import dto.Paging;
 import dto.Question;
 //question table의 crud담당
 public class QuestionDao {
+	
+	public ArrayList<HashMap<String, Object>> selectQuestionList() throws ClassNotFoundException, SQLException {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT q.num, q.title, q.startdate, q.enddate, t.cnt FROM question q INNER JOIN (SELECT qnum, SUM(COUNT) cnt FROM item GROUP BY qnum)t ON q.num = t.qnum";
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll","root","java1234");
+		stmt = conn.prepareStatement(sql);
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("num", rs.getInt("num"));
+			m.put("title", rs.getString("title"));
+			m.put("startdate", rs.getString("startdate"));
+			m.put("enddate", rs.getString("enddate"));
+			m.put("cnt", rs.getInt("cnt"));
+			list.add(m);
+		}
+		return list;
+	}
 
+	
 	public int selectQuestionCount() throws SQLException {
 	    int count = 0;
 	    String sql = "SELECT COUNT(*) FROM question"; 
@@ -18,6 +41,7 @@ public class QuestionDao {
 	        }
 			return count;
 	    }        
+	
 	public ArrayList<Question> selectQuestionList(Paging p) throws ClassNotFoundException, SQLException{
 		ArrayList<Question> list = new ArrayList<>();
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -67,5 +91,20 @@ public class QuestionDao {
 		
 		
 		return pk;
+	}
+	
+	 public void updateQuestion(Question q) throws Exception {
+	    	Class.forName("com.mysql.cj.jdbc.Driver");
+	        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll", "root", "java1234");
+	        String sql = "UPDATE question SET title=?, startdate=?, enddate=?, type=? WHERE num=?";
+	        PreparedStatement stmt = conn.prepareStatement(sql);
+	        stmt.setString(1, q.getTitle());
+	        stmt.setString(2, q.getStartdate());
+	        stmt.setString(3, q.getEnddate());
+	        stmt.setInt(4, q.getType());
+	        stmt.setInt(5, q.getNum());
+	        stmt.executeUpdate();
+	        stmt.close();
+	        conn.close();
 	}
 }

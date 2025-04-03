@@ -6,6 +6,7 @@ import dto.Item;
 
 //Item table의 crud담당
 public class ItemDao {
+	
 	public void insertItem(Item item) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;
@@ -25,4 +26,31 @@ public class ItemDao {
 		}
 		conn.close(); // 여러개있을때 문제될수있으므로 꼭 해주기
 	}
+	
+	public int selectItemCountByQnum(int qnum) throws SQLException {
+	    int count = 0;
+	    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll", "root", "java1234");
+	    String sql = "SELECT COUNT(*) FROM item WHERE qnum = ?";
+	        PreparedStatement stmt = conn.prepareStatement(sql); 
+	        stmt.setInt(1, qnum);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	        return count;
+	    }
+	    
+	public int selectItemCount() throws SQLException {
+	    int count = 0;
+	    String sql = "SELECT COUNT(*) FROM item"; 
+	    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll", "root", "java1234");
+	    PreparedStatement stmt = conn.prepareStatement(sql);
+	    ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+			return count;
+	    }        
+	
+
 }
