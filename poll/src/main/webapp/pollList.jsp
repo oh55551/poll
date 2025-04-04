@@ -4,6 +4,8 @@
 <%@ page import = "java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
+//request.getParameter는 값 중 하나만 필요할때(첫번째값 밖에 못받음)
+
 //questionDao완성 / pollList출력
 	//question 테이블 리스트-> 페이징 -> title링크(startdate오늘날짜enddate) -> 투표프로그램
 	//QuestionDao.selectQuestionList(Paging)

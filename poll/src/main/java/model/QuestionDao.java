@@ -7,6 +7,66 @@ import dto.Question;
 //question table의 crud담당
 public class QuestionDao {
 	
+	
+	public Question deleteQuestionTwo(int num) throws ClassNotFoundException, SQLException {
+		Question q = null;
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll","root","java1234");
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "DELETE FROM question WHERE num = ?";
+		stmt=conn.prepareStatement(sql);
+		stmt.setInt(1, num);
+		stmt.executeUpdate();
+		return q;
+	}
+	
+	public Question deleteQuestionOne(int num) throws ClassNotFoundException, SQLException {
+		Question q = null;
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll","root","java1234");
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM question q INNER JOIN "
+				+"(select qnum, sum(COUNT) from item GROUP BY qnum) t "
+				+"ON q.num=t.qnum where qnum = ?";
+		stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, num); 
+		rs = stmt.executeQuery();
+		if(rs.next()) {
+			q=new Question();
+			q.setNum(num);
+			q.setTitle(rs.getString("title"));
+			q.setStartdate(rs.getString("startdate"));
+			q.setEnddate(rs.getString("enddate"));
+			q.setType(rs.getInt("type"));
+		}
+		return q;
+	}
+	
+	
+	
+	public Question selectQuestionOne(int num) throws ClassNotFoundException, SQLException { //int num을 입력받아야한다
+		Question q = null;
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll","root","java1234");
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "select * from question where num=?";
+		stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, num);
+		rs = stmt.executeQuery();
+		if(rs.next()) {
+			q=new Question();
+			q.setNum(num);
+			q.setTitle(rs.getString("title"));
+			q.setStartdate(rs.getString("startdate"));
+			q.setEnddate(rs.getString("enddate"));
+			q.setType(rs.getInt("type"));
+		}
+		return q;
+	}
+	
 	public ArrayList<HashMap<String, Object>> selectQuestionList() throws ClassNotFoundException, SQLException {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -93,7 +153,7 @@ public class QuestionDao {
 		return pk;
 	}
 	
-	 public void updateQuestion(Question q) throws Exception {
+	 public int updateQuestion(Question q) throws Exception {
 	    	Class.forName("com.mysql.cj.jdbc.Driver");
 	        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll", "root", "java1234");
 	        String sql = "UPDATE question SET title=?, startdate=?, enddate=?, type=? WHERE num=?";
@@ -103,8 +163,9 @@ public class QuestionDao {
 	        stmt.setString(3, q.getEnddate());
 	        stmt.setInt(4, q.getType());
 	        stmt.setInt(5, q.getNum());
-	        stmt.executeUpdate();
+	        int row = stmt.executeUpdate();
 	        stmt.close();
 	        conn.close();
+	        return row;
 	}
 }
