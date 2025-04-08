@@ -102,7 +102,7 @@ public class ItemDao {
 	}
 	
 	
-	public int insertItem(Item item) throws ClassNotFoundException, SQLException {
+	public void insertItem(Item item) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;
 		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll","root","java1234");
@@ -119,7 +119,6 @@ public class ItemDao {
 		} else {
 			System.out.println("ItemDao.insertItem - 입력실패");
 		}
-		return row;
 		
 	}
 	

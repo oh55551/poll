@@ -28,6 +28,7 @@
 	<div>
 		<jsp:include page="/inc/nav.jsp"></jsp:include>
 	</div>
+	
 	<h1>설문리스트</h1>
 	<table class="table table-dark table-hover">
 		<tr>
