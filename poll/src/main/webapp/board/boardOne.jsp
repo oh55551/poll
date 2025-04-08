@@ -13,16 +13,13 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
-	<!-- Latest compiled and minified CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-	
-	<!-- Latest compiled JavaScript -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container">
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card p-4 shadow-sm">
 	<h1>board one</h1>
-	<table class="table table-striped">
+	 <table class="table table-bordered">
 		<tr>
 			<td>num</td>
 			<td><%=b.getNum() %></td>
@@ -64,8 +61,10 @@
 			<td><%=b.getCount() %></td>
 		</tr>
 	</table>
-	<a href="/poll/board/updateBoardForm.jsp?num=<%=b.getNum()%>">수정</a>
-	<a href="/poll/board/deleteBoardForm.jsp?num=<%=b.getNum()%>">삭제</a>
-	<a href="/poll/board/insertBoardReplyForm.jsp?ref=<%=b.getRef()%>&pos=<%=b.getPos()%>&depth=<%=b.getDepth()%>">답글달기</a>
+	<a href="/poll/board/updateBoardForm.jsp?num=<%=b.getNum()%>" class="btn btn-primary">수정</a>
+	<a href="/poll/board/deleteBoardForm.jsp?num=<%=b.getNum()%>" class="btn btn-danger">삭제</a>
+	<a href="/poll/board/insertBoardReplyForm.jsp?ref=<%=b.getRef()%>&pos=<%=b.getPos()%>&depth=<%=b.getDepth()%>" class="btn btn-secondary">답글달기</a>
+	</div>
+	</div>
 </body>
 </html>

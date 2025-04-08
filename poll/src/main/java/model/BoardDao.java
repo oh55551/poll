@@ -36,16 +36,18 @@ public class BoardDao {
 		System.out.println("업데이트 실행됨. 반영된 행 수: " + row);
 	}
 	
-	public void deleteBoard(Board b) throws ClassNotFoundException, SQLException{
+	public int deleteBoard(Board b) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection conn = null;
 		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/poll","root","java1234");
 		PreparedStatement stmt = null;
 		ResultSet rs= null;
-		String sql = "delete from board where num = ?";
+		String sql = "delete from board where num = ? and pass = ?";
 		stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, b.getNum());
+		stmt.setString(2, b.getPass());
 		int row = stmt.executeUpdate();
+		return row;
 	}
 	
 	
